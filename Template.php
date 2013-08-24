@@ -33,30 +33,6 @@ class Template {
 	}
 	
 	/**
-	* Insert a block.
-	* 
-	* @param string $label The label of the block to insert
-	* @param mixed $args (optional) Any extra arguments get added to the arguments array from render() and passed into the block.
-	**/
-	public function insert() {
-
-		$args = func_get_args();
-		$label = array_shift($args);
-
-		$tmp = $this->current_label;								// store the name of the current insert, then override with the new one
-		$this->current_label = $label;
-
-		foreach ($this->tree as $branch) {							// loop through the tree until we find a match
-			foreach ($branch as $tpl) {
-				if ($this->runBlock($label, $tpl, $args)) {
-					break 2;
-				}
-			}
-		}
-		$this->current_label = $tmp;								// revert back to old insert name
-	}
-	
-	/**
 	* Generate and return the template output.
 	* 
 	* @param string $tpl (optional) the template name to render
@@ -67,9 +43,8 @@ class Template {
 
 		self::$closures = array();
 	
-		$args = func_get_args();										// grab all arguments and convert template to path format
-		$tpl = implode('/', array_map('strtolower', preg_split('/(?=[A-Z])/', array_shift($args), -1, PREG_SPLIT_NO_EMPTY)));
-		$this->tree = array(array(str_replace(self::$extension, '', $tpl)));
+		$args = func_get_args();										// grab all arguments 
+		$this->tree = array(array(str_replace(self::$extension, '', array_shift($args))));
 			
 		$template = &$this;												// store a reference to the instance, and add it to the args array
 		array_unshift($args, $this);
@@ -94,6 +69,30 @@ class Template {
 
 		self::$closures = null;
 		return $contents;
+	}
+
+	/**
+	* Insert a block.
+	* 
+	* @param string $label The label of the block to insert
+	* @param mixed $args (optional) Any extra arguments get added to the arguments array from render() and passed into the block.
+	**/
+	public function insert() {
+
+		$args = func_get_args();
+		$label = array_shift($args);
+
+		$tmp = $this->current_label;								// store the name of the current insert, then override with the new one
+		$this->current_label = $label;
+
+		foreach ($this->tree as $branch) {							// loop through the tree until we find a match
+			foreach ($branch as $tpl) {
+				if ($this->runBlock($label, $tpl, $args)) {
+					break 2;
+				}
+			}
+		}
+		$this->current_label = $tmp;								// revert back to old insert name
 	}
 	
 	/**

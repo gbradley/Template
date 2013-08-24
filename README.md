@@ -72,10 +72,11 @@ To extend a template, create a new file (let's call it 'signin.tpl.php') and use
 
     <? $this->extend('base'); ?>
     
-Because you're extending a template with an `init` method, you can skip that step and go straight to defining your blocks. You can easily overwrite an existing block:
+Because you're extending a template with an existing `init` method, you can skip that step and go straight to defining your blocks. You can easily overwrite an existing block:
 
     <? $this->define('greeting', function($template, $vars){ ?>
-    <p>Hello, <?=$vars['name']?>, sign in now!</p>
+    <p>Hello, <?=$vars['name']?></p>
+    <p>Why don't you sign in now.</p>
     <? }); ?>
     
 Alternatively you can avoid duplicating the block's content with `super`, which inserts the extended template's block:
@@ -96,3 +97,14 @@ To do this, just pass the names of both templates to `extend`:
     
 The order of the arguments denotes the precedence if both templates define blocks with the same label.
 
+### The template directory
+
+If you have a lot of templates, you may want to split them up into subdirectories. The `render` method accepts names path format, which lets you map to directory structures like this:
+
+    templates/
+        main/
+        forms/
+            signup.tpl.php
+
+    $this->render('forms/signup');
+    
