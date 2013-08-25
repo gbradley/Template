@@ -66,7 +66,7 @@ class Template {
 		ob_end_clean();
 
 		self::$closures = null;
-		return $contents;
+		return trim($contents);
 	}
 
 	/**
