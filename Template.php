@@ -10,6 +10,7 @@ class Template {
 	protected $options  		= null;
 	private $current_tpl 		= null;				// the current template
 	private $current_label 		= null;				// the current block label
+	private $args 				= null;				// arguments to forward to blocks
 
 	public static $extension 	= '.tpl.php';		// the template extension
 	protected static $closures 	= null;				// stores closures for blocks
@@ -45,10 +46,7 @@ class Template {
 	
 		$args = func_get_args();										// grab all arguments 
 		$this->tree = array(array(array_shift($args)));
-			
-		$template = &$this;												// store a reference to the instance, and add it to the args array
-		array_unshift($args, $this);
-		$template->vars = $args;
+		$this->args = $args;
 
 		$i = 0;
 		ob_start();
@@ -154,7 +152,8 @@ class Template {
 	private function runBlock($label = null, $tpl = null, $pass_thru = null) {
 		$block = self::getBlock($label ? ($tpl . '_' . $label) : '*');
 		if ($block) {
-			$args = $this->vars;
+			$args = $this->args;
+			array_unshift($args, $this);
 			if ($pass_thru) {
 				$args = array_merge($args, $pass_thru);
 			}
