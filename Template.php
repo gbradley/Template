@@ -44,7 +44,7 @@ class Template {
 		self::$closures = array();
 	
 		$args = func_get_args();										// grab all arguments 
-		$this->tree = array(array(str_replace(self::$extension, '', array_shift($args))));
+		$this->tree = array(array(array_shift($args)));
 			
 		$template = &$this;												// store a reference to the instance, and add it to the args array
 		array_unshift($args, $this);

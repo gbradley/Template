@@ -56,7 +56,7 @@ You can add as many arguments as you like, and they will be passed to every bloc
     <p>Hello, <?=$name?>!</p>
     <? }); ?>
     
-If you're passing more than a couple of arguments, its probably better to just pass an associative array:
+If you're passing mmultiple arguments, its probably better to just pass an associative array:
 
     $vars = array(
         'name' 	=> 'Graham',
@@ -72,14 +72,14 @@ To extend a template, create a new file (let's call it 'signin.tpl.php') and use
 
     <? $this->extend('base'); ?>
     
-Because you're extending a template with an existing `init` method, you can skip that step and go straight to defining your blocks. You can easily overwrite an existing block:
+Because you're extending a template which contains an `init` method, you can skip that step and go straight to defining your blocks. You can easily overwrite an existing block:
 
     <? $this->define('greeting', function($template, $vars){ ?>
     <p>Hello, <?=$vars['name']?></p>
     <p>Why don't you sign in now.</p>
     <? }); ?>
     
-Alternatively you can avoid duplicating the block's content with `super`, which inserts the extended template's block:
+You can avoid duplication altogether with `super`, which inserts the extended template's block:
 
     <? $this->define('greeting', function($template, $vars){ ?>
     <? $template->super(); ?>
@@ -99,10 +99,9 @@ The order of the arguments denotes the precedence if both templates define block
 
 ### The template directory
 
-If you have a lot of templates, you may want to split them up into subdirectories. The `render` method accepts names path format, which lets you map to directory structures like this:
+When you have a lot of templates, you may want to split them up into subdirectories. The `render` method accepts names path format, which lets you map to directory structures like this:
 
     templates/
-        main/
         forms/
             signup.tpl.php
 
